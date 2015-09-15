@@ -1,0 +1,7 @@
+
+cc_config(
+    append = config_items(
+        extra_incs = ['thirdparty/gtest/include'], 
+        cppflags = ['-std=c++11'],
+    )
+)

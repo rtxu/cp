@@ -1,4 +1,6 @@
 
+#include <gtest/gtest.h>
+
 #include <vector>
 #include <unordered_map>
 
@@ -10,12 +12,13 @@ public:
         unordered_map<int, int> m;
         vector<int> indexes;
         for (size_t i = 0; i < nums.size(); ++i) {
-            if (m.find(nums[i]) == m.end()) {
+            auto it = m.find(nums[i]);
+            if (it == m.end()) {
                 // not found result yet
                 m[target-nums[i]] = i;
             } else {
                 // found result
-                indexes.push_back(m[nums[i]]+1);
+                indexes.push_back(it->second+1);
                 indexes.push_back(i+1);
                 break;
             }
@@ -23,3 +26,11 @@ public:
         return indexes;
     }
 };
+
+TEST(TwoSumUT, BasicTest) {
+    Solution s;
+    vector<int> nums = {3, 2, 4};
+    vector<int> results = s.twoSum(nums, 6);
+
+    EXPECT_EQ((size_t)2, results.size());
+}

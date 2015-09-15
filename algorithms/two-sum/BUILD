@@ -1,6 +1,5 @@
 
-cc_library(
+cc_test(
     name = 'twosum',
     srcs = ['solution.cpp'],
-    extra_cppflags = ['-std=c++11'],
 )
