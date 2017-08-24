@@ -3,59 +3,36 @@ package main
 import "fmt"
 
 func isMatch(s string, p string) bool {
-	si, slen := 0, len(s)
-	pi, plen := 0, len(p)
+	slen := len(s)
+	plen := len(p)
 
-	for si < slen && pi < plen {
-		switch p[pi] {
-		case '.':
-			if pi+1 < plen && p[pi+1] == '*' {
-				pi++
-			} else {
-				si++
-				pi++
-			}
-		case '*':
-			ch := p[pi-1]
-			if ch == '.' {
-				for i := 0; i <= slen-si; i++ {
-					if isMatch(s[si+i:], p[pi+1:]) {
-						return true
-					}
-				}
-			} else {
-				if isMatch(s[si:], p[pi+1:]) {
-					return true
-				}
-				for i := 1; i <= slen-si && s[si+i-1] == ch; i++ {
-					if isMatch(s[si+i:], p[pi+1:]) {
-						return true
-					}
-				}
-			}
+	//fmt.Println(s, p)
+	if plen == 0 {
+		return slen == 0
+	}
+	if slen == 0 {
+		if plen > 1 && p[1] == '*' {
+			return isMatch(s, p[2:])
+		} else {
 			return false
-		default:
-			if pi+1 < plen && p[pi+1] == '*' {
-				pi++
-			} else {
-				if s[si] == p[pi] {
-					si++
-					pi++
-				} else {
-					return false
-				}
-			}
 		}
 	}
 
-	if si == slen {
-		for plen > pi && p[plen-1] == '*' {
-			plen -= 2
+	if (plen > 1 && p[1] != '*') || plen <= 1 {
+		if s[0] == p[0] || p[0] == '.' {
+			return isMatch(s[1:], p[1:])
+		} else {
+			return false
 		}
-		return pi == plen
 	} else {
-		return false
+		for i := 0; i < slen && (s[i] == p[0] || p[0] == '.'); i++ {
+			if isMatch(s[i+1:], p[2:]) {
+				return true
+			}
+		}
+		return isMatch(s, p[2:])
 	}
+
 }
 
 func main() {
