@@ -9,20 +9,13 @@ func largestRectangleArea(heights []int) int {
 	n := len(heights)
 	// minHeight[i][j] means the minimum height between [i, j)
 	// so area[i][j] = (j-i)*minHeight[i][j]
-	minHeight := make([][]int, n+1)
-	for i := 0; i <= n; i++ {
-		minHeight[i] = make([]int, n+1)
-	}
 	var maxArea int
 	for i := 0; i < n; i++ {
+		min := heights[i]
 		for j := i + 1; j <= n; j++ {
-			if j == i+1 {
-				minHeight[i][j] = heights[i]
-			} else {
-				minHeight[i][j] = int(math.Min(float64(minHeight[i][j-1]), float64(heights[j-1])))
-			}
-			if (j-i)*minHeight[i][j] > maxArea {
-				maxArea = (j - i) * minHeight[i][j]
+			min = int(math.Min(float64(min), float64(heights[j-1])))
+			if (j-i)*min > maxArea {
+				maxArea = (j - i) * min
 			}
 		}
 	}
