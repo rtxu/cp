@@ -25,7 +25,7 @@ for i := 0; i < n; i++ {
 
 # solution
 
-## 一
+## 方法一
 最直观的想法，对于每个 h[i]，分别找到其左边/右边最近的 < h[i] 的位置，用 `h[i] * (lessFromRigit[i] - lessFromLeft[i] - 1)` 尝试更新当前的 maxArea，遍历所有 h[i] 后，即获得答案。
 
 该算法初看起来依然是 O(n^2)，因为需要为每个 h[i] 计算 lessFromLeft[i]。
@@ -103,7 +103,7 @@ less     |-1 | 0 | 1 | 2 | 3 | 1 | 5 | 0
 3. 当 `h[j] >= h[i] && i > j` 时，lessFromLeft[i] 形成了对 [j, i) 的屏障，使其不会再被访问
 4. lessFromLeft[j] 一旦被访问，说明 `h[j] >= h[i] && i > j`，结合 3，lessFromLeft[j] 不会再被访问
 
-## 二
+## 方法二
 
 方法一的复杂度分析不容易推导，方法二提供更符合直觉的复杂度分析方法。
 
