@@ -41,4 +41,4 @@
 
 在前两类方法中，我的思维陷入了自己制造的牢笼之中: **枚举端点**
 
-放弃枚举端点的想法，转而选择枚举矩形底部所在的行，假设最大面积的矩形底部出现在第 i 行，那么 i 行 j 列，i-1 行 j 列，... , 0 行 j 列的连续 1 的数目就会构成一根高度为 h (取决于从 matrxi[i][j] 开始向上连续 1 的数目) 的柱子，则以第 i 行为矩形底部所能形成的最大矩形问题，问题被转化成了 [Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/description/)，而 Largest Rectangle in Histogram 具有 O(n) 解，故整个问题的复杂度变为 O(n^2)
+放弃枚举端点的想法，转而选择枚举矩形底部所在的行，假设最大面积的矩形底部出现在第 i 行，那么 i 行 j 列，i-1 行 j 列，... , 0 行 j 列的连续 1 的数目就会构成一根高度为 h (取决于从 matrxi[i][j] 开始向上连续 1 的数目) 的柱子，则以第 i 行为矩形底部所能形成的最大矩形问题，被转化成了 [Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/description/)，而 Largest Rectangle in Histogram 具有 O(n) 解，故整个问题的复杂度变为 O(n^2)
