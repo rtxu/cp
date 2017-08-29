@@ -3,55 +3,27 @@ package main
 import "fmt"
 
 func longestConsecutive(nums []int) int {
-	rangeBegin := make(map[int]int) // map range begin to end
-	rangeEnd := make(map[int]int)   // map range end to begin
-	processed := make(map[int]bool)
-
 	n := len(nums)
+	numSet := make(map[int]int, n)
 	for i := 0; i < n; i++ {
-		cur := nums[i]
-		if processed[cur] {
-			continue
-		}
-		var beginExtend, endExtend bool
-		if _, exist := rangeEnd[cur-1]; exist {
-			rangeEnd[cur] = rangeEnd[cur-1]
-			rangeBegin[rangeEnd[cur-1]]++
-			endExtend = true
-			delete(rangeEnd, cur-1)
-		}
-		if _, exist := rangeBegin[cur+1]; exist {
-			rangeBegin[cur] = rangeBegin[cur+1]
-			rangeEnd[rangeBegin[cur+1]]--
-			beginExtend = true
-			delete(rangeBegin, cur+1)
-		}
-		if beginExtend && endExtend {
-			begin, end := rangeEnd[cur], rangeBegin[cur]
-			delete(rangeBegin, rangeEnd[cur])
-			delete(rangeEnd, cur)
-			delete(rangeEnd, rangeBegin[cur])
-			delete(rangeBegin, cur)
-			rangeBegin[begin] = end
-			rangeEnd[end] = begin
-		} else if !beginExtend && !endExtend {
-			rangeBegin[cur] = cur
-			rangeEnd[cur] = cur
-		}
-		processed[cur] = true
-
-		/*
-			fmt.Println("Round: ", i)
-			for begin, end := range rangeBegin {
-				fmt.Println(begin, end)
-			}
-		*/
+		numSet[nums[i]] = 1
 	}
 
 	var maxLength int
-	for begin, end := range rangeBegin {
-		if (end - begin + 1) > maxLength {
-			maxLength = end - begin + 1
+	for i, _ := range numSet {
+		if _, exist := numSet[i-1]; !exist {
+			// now i is the begin
+			j := i + 1
+			for {
+				if _, exist := numSet[j]; exist {
+					j++
+				} else {
+					break
+				}
+			}
+			if j-i > maxLength {
+				maxLength = j - i
+			}
 		}
 	}
 	return maxLength
