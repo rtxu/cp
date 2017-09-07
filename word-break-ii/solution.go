@@ -1,25 +1,38 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
-func search(wordMap map[string]interface{}, s string) []string {
-	n := len(s)
-	result := make([]string, 0)
-	for i := 1; i <= n; i++ {
-		if _, exist := wordMap[s[:i]]; exist {
-			if i == n {
-				result = append(result, s)
-			} else {
-				if suffixes := search(wordMap, s[i:]); suffixes == nil {
-				} else {
-					for j := 0; j < len(suffixes); j++ {
-						result = append(result, s[:i]+" "+suffixes[j])
-					}
-				}
-			}
+var result []string
+var words []string
+
+func constructResult(n int, D []int, wordMap map[string]interface{}, s string) {
+	// fmt.Printf("n = %d, D[n] = %d\n", n, D[n])
+	if D[n] == 0 {
+		return
+	}
+	if n == 0 {
+		wordCount := len(words)
+		for i := 0; i < wordCount/2; i++ {
+			words[i], words[wordCount-1-i] = words[wordCount-1-i], words[i]
+		}
+		result = append(result, strings.Join(words, " "))
+		for i := 0; i < wordCount/2; i++ {
+			words[i], words[wordCount-1-i] = words[wordCount-1-i], words[i]
+		}
+		return
+	}
+
+	for word, _ := range wordMap {
+		j := n - len(word)
+		if j >= 0 && s[j:] == word {
+			words = append(words, word)
+			constructResult(j, D, wordMap, s[:j])
+			words = words[:len(words)-1]
 		}
 	}
-	return result
 }
 
 func wordBreak(s string, wordDict []string) []string {
@@ -27,8 +40,24 @@ func wordBreak(s string, wordDict []string) []string {
 	for i := 0; i < len(wordDict); i++ {
 		wordMap[wordDict[i]] = nil
 	}
+	n := len(s)
+	// D[i] means the number of valid sentences for s[:i]
+	D := make([]int, n+1)
+	D[0] = 1
+	for i := 1; i <= n; i++ {
+		for word, _ := range wordMap {
+			j := i - len(word)
+			if j >= 0 && s[j:i] == word {
+				D[i] += D[j]
+			}
+		}
+	}
+	// fmt.Printf("the number of valid sentences: %d\n", D[n])
 
-	return search(wordMap, s)
+	result = make([]string, 0, D[n])
+	words = make([]string, 0)
+	constructResult(n, D, wordMap, s)
+	return result
 }
 
 func main() {
@@ -39,4 +68,9 @@ func main() {
 
 	s, dict = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", []string{"a", "aa", "aaa", "aaaa", "aaaaa", "aaaaaa", "aaaaaaa", "aaaaaaaa", "aaaaaaaaa", "aaaaaaaaaa"}
 	fmt.Printf("s: %s, dict: %v, result: %v\n", s, dict, wordBreak(s, dict))
+	// too many answer
+	/*
+		s, dict = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", []string{"a", "aa", "aaa", "aaaa", "aaaaa", "aaaaaa", "aaaaaaa", "aaaaaaaa", "aaaaaaaaa", "aaaaaaaaaa"}
+		fmt.Printf("s: %s, dict: %v, result: %v\n", s, dict, wordBreak(s, dict))
+	*/
 }
