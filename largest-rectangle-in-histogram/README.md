@@ -110,6 +110,7 @@ less     |-1 | 0 | 1 | 2 | 3 | 1 | 5 | 0
 考虑起初的 insight: 最终答案一定来自序列的某个高度 h[i]。
 
 方法一：对于 h[i]，计算 lessFromLeft[i] 和 lessFromRight[i]
+
 方法二：当 `h[i+1] < h[i]` 时，h[i] 的 lessFromRight 即为 `i+1`，lessFromLeft 可以在遍历 h 的过程中记录下来，维护一个高度单调非降的位置序列 Q。除此之外，h[i+1] 不仅是 h[i] 的 lessFromRight，还可能是 Q 中其他位置的 lessFromRight，只要满足 `h[Q[len(Q)-1]] > h[i+1]`
 
 复杂度证明：一层循环遍历 h，每个位置最多进出 Q 一次，复杂度 O(n)
