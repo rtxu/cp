@@ -1,0 +1,22 @@
+func numberOfArithmeticSlices(A []int) int {
+    // S(i, diff) 表示以 i 结尾且差值为 diff 的序列个数
+    // 遍历任意 (i, j) 对 i < j，S(j, A[j]-A[i]) += 1
+    // 如果 S(j, A[j]-A[i]) 存在 && S(i, A[j]-A[i]) 存在，则构成了合法序列（长度最少为3）
+    var result int
+    n := len(A)
+    S := make([]map[int]int, n)
+    for i := 0; i < n; i++ {
+        S[i] = make(map[int]int)
+    }
+    for i := 0; i < n; i++ {
+        for j := i+1; j < n; j++ {
+            diff := A[j] - A[i]
+            S[j][diff] += 1
+            if cnt, exist := S[i][diff]; exist {
+                result += cnt
+                S[j][diff] += cnt
+            }
+        }
+    }
+    return result
+}
