@@ -15,4 +15,10 @@ readonly PROBLEM=$1
 mkdir $PROBLEM
 mv solution.go $PROBLEM
 git add $PROBLEM
-git commit -m "solution($PROBLEM)"
+
+if [ -z $2 ]; then
+  MSG="solution($PROBLEM)"
+else
+  MSG="solution($PROBLEM): $2"
+fi
+git commit -m "$MSG"
