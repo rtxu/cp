@@ -16,9 +16,13 @@ mkdir $PROBLEM
 mv solution.go $PROBLEM
 git add $PROBLEM
 
+# $2 maybe unset variable
+set +u
 if [ -z $2 ]; then
   MSG="solution($PROBLEM)"
 else
   MSG="solution($PROBLEM): $2"
 fi
+set -u
+
 git commit -m "$MSG"
