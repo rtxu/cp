@@ -1,3 +1,5 @@
+// Time: O(K*logN)
+// Space: O(N)
 
 type Node struct {
     r, c    int
