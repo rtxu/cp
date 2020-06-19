@@ -40,13 +40,13 @@ func preorder_traversal_iterate(root *TreeNode) []int {
   push(root)
   for len(stack) > 0 {
     current := top()
-    if lastPop == current.Left {
+    if current.Left != nil && lastPop == current.Left {
       if current.Right != nil {
         push(current.Right)
       } else {
         lastPop = pop()
       }
-    } else if lastPop == current.Right {
+    } else if current.Right != nil && lastPop == current.Right {
       lastPop = pop()
     } else {
       if current.Left != nil {
@@ -93,14 +93,14 @@ func inorder_traversal_iterate(root *TreeNode) []int {
   push(root)
   for len(stack) > 0 {
     current := top()
-    if lastPop == current.Left {
+    if current.Left != nil && lastPop == current.Left {
       result = append(result, current.Val)
       if current.Right != nil {
         push(current.Right)
       } else {
         lastPop = pop()
       }
-    } else if lastPop == current.Right {
+    } else if current.Right != nil && lastPop == current.Right {
       lastPop = pop()
     } else {
       if current.Left != nil {
@@ -150,13 +150,13 @@ func postorder_traversal_iterate(root *TreeNode) []int {
   push(root)
   for len(stack) > 0 {
     current := top()
-    if lastPop == current.Left {
+    if current.Left != nil && lastPop == current.Left {
       if current.Right != nil {
         push(current.Right)
       } else {
         lastPop = pop()
       }
-    } else if lastPop == current.Right {
+    } else if current.Right != nil && lastPop == current.Right {
       lastPop = pop()
     } else {
       if current.Left != nil {
@@ -178,6 +178,8 @@ func main() {
     2     4
    / \   /
   1   7 3
+ /
+0
   */
   root := &TreeNode{
     Val: 5,
@@ -185,6 +187,9 @@ func main() {
       Val: 2,
       Left: &TreeNode{
         Val: 1,
+        Left: &TreeNode{
+          Val: 0,
+        },
       },
       Right: &TreeNode{
         Val: 7,
