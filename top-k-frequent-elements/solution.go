@@ -1,3 +1,6 @@
+// Time: O(n)
+// Space: O(n)
+
 func topKFrequent(nums []int, k int) []int {
     count := make(map[int]int)
     n := len(nums)
