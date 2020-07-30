@@ -92,9 +92,9 @@ Coding 复杂度：**
 状态转移：
 
 1. 删除字符。T(i+1, k-1)，if k > 0
-2. 保留字符。枚举以 s[i] 为首的字符组的所有可能结束位置 j，encodeOne(sameCount([i, j+1))) + T(j+1, k - (j+1-i) - sameCount([i, j+1))，if k - (j+1-i) - sameCount([i, j+1) >= 0
+2. 保留字符。枚举以 s[i] 为首的字符组的所有可能结束位置 j，encodeOne(sameCount([i, j+1))) + T(j+1, k - diffCount([i, j+1))，if k - diffCount([i, j+1) >= 0
 
-其中，sameCount([i, j+1)) 表示 [i, j+1) 范围内与 s[i] 相同的字符个数，则 (j+1-i) - sameCount([i, j+1)) 为 [i, j+1) 内与 s[i] 不同的字符个数，即 [i, j+1) 内被删除的字符个数
+其中，sameCount([i, j+1)) 表示 [i, j+1) 范围内与 s[i] 相同的字符个数，则 diffCount([i, j)) = (j+1-i) - sameCount([i, j+1)) 为 [i, j+1) 内与 s[i] 不同的字符个数，即 [i, j+1) 内被删除的字符个数
 
 时间复杂度：状态 O(nk)，转移O(n)，最终 O(n^2k)
 空间复杂度：O(nk)
