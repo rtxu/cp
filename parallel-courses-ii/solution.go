@@ -1,72 +1,57 @@
-type Node struct {
-    id          int
-    outdegree   int
+const INF = 1e9
+
+func umin(current *int, val int) {
+    if val < *current {
+        *current = val
+    }
 }
 
-type MaxHeap []Node
-
-func (h MaxHeap) Len() int           { return len(h) }
-func (h MaxHeap) Less(i, j int) bool { return h[i].outdegree > h[j].outdegree }
-func (h MaxHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
-
-func (h *MaxHeap) Push(x interface{}) {
-	// Push and Pop use pointer receivers because they modify the slice's length,
-	// not just its contents.
-	*h = append(*h, x.(Node))
+func ceil(n, k int) int {
+    return 1 + (n-1)/k
 }
 
-func (h *MaxHeap) Pop() interface{} {
-	old := *h
-	n := len(old)
-	x := old[n-1]
-	*h = old[0 : n-1]
-	return x
+func countBits(n int) int {
+    var res int
+    for i := n; i > 0; i -= i&-i {
+        res++
+    }
+    return res
 }
 
 func minNumberOfSemesters(n int, deps [][]int, k int) int {
-    indegree := make([]int, n+1)
-    outdegree := make([]int, n+1)
-    depsCnt := len(deps)
-    for i := 0; i < depsCnt; i++ {
+    pre := make([]int, n)
+    for i := 0; i < len(deps); i++ {
         x, y := deps[i][0], deps[i][1]
-        indegree[y]++
-        outdegree[x]++
+        x--
+        y--
+        pre[y] |= (1 << x)
     }
-
-    
-    Q := make(MaxHeap, 0)
-    for i := 1; i <= n; i++ {
-        if indegree[i] == 0 {
-            heap.Push(&Q, Node{i, outdegree[i]})
-        }
-    }
-    count := 0
-    for Q.Len() > 0 {
-        qsize := Q.Len()
-        count += qsize / k
-        if qsize < k {
-            count++
-        } else {
-            qsize -= qsize % k
-        }
-        nextQ := []int{}
-        for i := 0; i < qsize; i++ {
-            current := heap.Pop(&Q).(Node)
-            fmt.Println("current", current)
-            for j := 0; j < depsCnt; j++ {
-                x, y := deps[j][0], deps[j][1]
-                if x == current.id {
-                    indegree[y]--
-                    if indegree[y] == 0 {
-                        nextQ = append(nextQ, y)
-                    }
-                }
+    T := make([]int, 1<<n)
+    statePre := make([]int, 1<<n)
+    for s := 1; s < 1<<n; s++ {
+        T[s] = INF
+        for j := 0; j < n; j++ {
+            if s & (1<<j) > 0 {
+                statePre[s] |= pre[j]
             }
         }
-        for i := 0; i < len(nextQ); i++ {
-            y := nextQ[i]
-            heap.Push(&Q, Node{y, outdegree[y]})
+    }
+    for s := 1; s < 1<<n; s++ {
+        for i := (s-1)&s; ; i = (i-1)&s {
+            todo := s - i
+            if statePre[todo] & i == statePre[todo] {
+                umin(&T[s], T[i] + ceil(countBits(todo), k))
+            }
+            if i == 0 {
+                break
+            }
         }
     }
-    return count
+    return T[(1<<n)-1]
 }
+
+// T(s) 表示 s 状态需要的最小 semester 数，
+// s 为 n-bit 二进制数，第 i bit 为 1 表示此课已上
+// 显然，T(0) = 0
+// T(s) = min{T(i) + ceil(countBits(s-i), k)}, i 是 s 的 submask && (s-i) 中的课 degree 均为 0
+// i 表示已经上完的课，s-i 即为要上的课
