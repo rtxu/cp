@@ -1,6 +1,4 @@
 
-[做 Competitive Programming 过程中的一些总结](https://www.processon.com/view/link/5ef8c0cce0b34d4dba5ae2c3)
-
 # Problem with tutorial
 - [Largest Rectangle in Histogram](https://github.com/xrtgavin/leetcode/tree/master/largest-rectangle-in-histogram/README.md)
 - [Longest Valid Parentheses](https://github.com/xrtgavin/leetcode/tree/master/longest-valid-parentheses/README.md)
