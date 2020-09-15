@@ -40,7 +40,7 @@ endif
 %.out: % # Cancel the builtin rule
 
 __test_%: %.res %.out
-	diff $*.res $*.out
+	diff -u $*.res $*.out
 
 runs: $(patsubst %,%.res,$(CASES))
 
