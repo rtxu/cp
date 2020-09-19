@@ -13,7 +13,7 @@ trap "echo 'error: Script failed: see failed command above'" ERR
 
 readonly PROBLEM=$1
 mkdir $PROBLEM
-mv solution*.go $PROBLEM
+mv solution*.* $PROBLEM
 git add $PROBLEM
 
 # $2 maybe unset variable
